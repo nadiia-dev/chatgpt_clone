@@ -1,7 +1,11 @@
 import express from "express";
 import http from "http";
 import cors from "cors";
+import dotenv from "dotenv";
 import { registerSocketServer } from "./src/socketServer.js";
+import "./src/ai.js";
+
+dotenv.config();
 
 const app = express();
 

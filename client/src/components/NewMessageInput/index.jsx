@@ -16,6 +16,12 @@ const NewMessageInput = () => {
   );
   const dispatch = useDispatch();
 
+  const conversations = useSelector((state) => state.dashboard.conversations);
+
+  const selectedConversation = conversations.find(
+    (c) => c.id === selectedConversationId
+  );
+
   const proceedMessage = () => {
     const message = { aiMessage: false, content, id: uuid(), animate: false };
     let conversationId = selectedConversationId;
@@ -50,6 +56,12 @@ const NewMessageInput = () => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onKeyDown={handleKeyPressed}
+        disabled={
+          selectedConversation &&
+          !selectedConversation.messages[
+            selectedConversation.messages.length - 1
+          ].aiMessage
+        }
       />
       <div
         className="absolute right-[calc(50%-325px+10px)] cursor-pointer text-stone-500 hover:text-white transition"

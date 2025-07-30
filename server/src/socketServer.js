@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { v4 as uuid } from "uuid";
+import openai from "./ai.js";
 
 let sessions = {};
 
@@ -15,7 +16,6 @@ export const registerSocketServer = (server) => {
     console.log(`Connected socket id: ${socket.id}`);
 
     socket.on("sendMessage", (data) => {
-      console.log("💬 Got sendMessage from client:", data);
       newMessageHandler(socket, data);
     });
 
@@ -29,10 +29,10 @@ export const registerSocketServer = (server) => {
   });
 };
 
-const newMessageHandler = (socket, data) => {
+const newMessageHandler = async (socket, data) => {
   const { sessionId, message, conversationId } = data;
 
-  const previousConversationMessages = [];
+  const prevMessages = [];
 
   if (sessions[sessionId]) {
     const existingConversation = sessions[sessionId].find(
@@ -40,7 +40,7 @@ const newMessageHandler = (socket, data) => {
     );
 
     if (existingConversation) {
-      previousConversationMessages.push(
+      prevMessages.push(
         ...existingConversation.messages.map((m) => ({
           content: m.content,
           role: m.aiMessage ? "assistant" : "user",
@@ -48,8 +48,17 @@ const newMessageHandler = (socket, data) => {
       );
     }
 
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [...prevMessages, { role: "user", content: message.content }],
+    });
+
+    const aiMessageContent = response.choices[0].message.content;
+
     const aiMessage = {
-      content: "This is ai",
+      content: aiMessageContent
+        ? aiMessageContent
+        : "Error while trying to get response from ai",
       id: uuid(),
       aiMessage: true,
     };
