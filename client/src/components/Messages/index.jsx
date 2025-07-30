@@ -1,10 +1,25 @@
 import Message from "../Message";
+import { useSelector } from "react-redux";
 
 const Messages = () => {
+  const { selectedConversationId, conversations } = useSelector(
+    (state) => state.dashboard
+  );
+
+  const conversation = conversations.find(
+    (c) => c.id === selectedConversationId
+  );
   return (
     <div className="w-full h-full flex flex-col">
-      <Message aiMessage content={"hello"} animate />
-      <Message content={"hello"} />
+      {conversation &&
+        conversation.messages.map((m, index) => (
+          <Message
+            key={m.id}
+            content={m.content}
+            aiMessage={m.aiMessage}
+            animate={index === conversation.messages.length - 1 && m.aiMessage}
+          />
+        ))}
     </div>
   );
 };

@@ -10,5 +10,13 @@ export const registerSockerServer = (server) => {
 
   io.on("connection", (socket) => {
     console.log(`Connected socket id: ${socket.id}`);
+
+    socket.on("sendMessage", (data) => {
+      newMessageHandler(socket, data);
+    });
   });
+};
+
+const newMessageHandler = (socket, data) => {
+  console.log("new message", data);
 };
