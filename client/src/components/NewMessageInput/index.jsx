@@ -6,7 +6,7 @@ import {
   addMessage,
   setSelectedConversation,
 } from "../../redux/dashboard/slice";
-import { sendMessage } from "../../socketServer/sockerConnection";
+import { sendMessage } from "../../socketServer/socketConnection";
 
 const NewMessageInput = () => {
   const [content, setContent] = useState("");
@@ -18,7 +18,8 @@ const NewMessageInput = () => {
 
   const proceedMessage = () => {
     const message = { aiMessage: false, content, id: uuid(), animate: false };
-    let conversationId;
+    let conversationId = selectedConversationId;
+
     if (selectedConversationId === "new") {
       conversationId = uuid();
       dispatch(addMessage({ conversationId, message }));
@@ -26,6 +27,7 @@ const NewMessageInput = () => {
     } else {
       dispatch(addMessage({ conversationId, message }));
     }
+
     sendMessage({ message, conversationId });
     setContent("");
   };

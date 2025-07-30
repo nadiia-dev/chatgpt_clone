@@ -7,7 +7,6 @@ import { setSelectedConversation } from "../../redux/dashboard/slice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const conversations = useSelector((state) => state.dashboard.conversations);
-  console.log(conversations);
 
   const handleSelectChat = (id) => {
     dispatch(setSelectedConversation(id));
@@ -17,7 +16,12 @@ const Sidebar = () => {
       <NewChatButton handleSelectChat={handleSelectChat} />
       {conversations &&
         conversations.map((c) => (
-          <ListItem key={c.id} title={c.messages[0].content} chatId={c.id} />
+          <ListItem
+            key={c.id}
+            title={c.messages[0].content}
+            conversationId={c.id}
+            handleSetSelectedChat={handleSelectChat}
+          />
         ))}
       <DeleteChatButton />
     </div>

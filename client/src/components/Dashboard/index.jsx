@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 import Chat from "../Chat";
 import Sidebar from "../Sidebar";
-import { Spinner } from "../Spinner";
+import Spinner from "../Spinner";
 
 const Dashboard = () => {
-  const { sessionEstablished } = useSelector(
+  const sessionEstablished = useSelector(
     (state) => state.dashboard.sessionEstablished
   );
   return (

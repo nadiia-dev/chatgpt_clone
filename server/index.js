@@ -1,12 +1,12 @@
 import express from "express";
 import http from "http";
 import cors from "cors";
-import { registerSockerServer } from "./src/sockerServer.js";
+import { registerSocketServer } from "./src/socketServer.js";
 
 const app = express();
 
 const server = http.createServer(app);
-registerSockerServer(server);
+registerSocketServer(server);
 
 app.use(cors());
 
