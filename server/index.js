@@ -1,0 +1,21 @@
+import express from "express";
+import http from "http";
+import cors from "cors";
+import { registerSockerServer } from "./src/sockerServer.js";
+
+const app = express();
+
+const server = http.createServer(app);
+registerSockerServer(server);
+
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.send("Hello world");
+});
+
+const PORT = process.env.PORT | 3000;
+
+server.listen(PORT, () => {
+  console.log(`App started on port ${PORT}`);
+});
