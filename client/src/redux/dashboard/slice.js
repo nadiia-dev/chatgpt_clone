@@ -25,8 +25,13 @@ const dashboardSlice = createSlice({
         state.conversations.push({ id: conversationId, messages: [message] });
       }
     },
+    setConversations: (state, action) => {
+      state.conversations = action.payload;
+      state.sessionEstablished = true;
+    },
   },
 });
 
-export const { setSelectedConversation, addMessage } = dashboardSlice.actions;
+export const { setSelectedConversation, addMessage, setConversations } =
+  dashboardSlice.actions;
 export default dashboardSlice.reducer;
